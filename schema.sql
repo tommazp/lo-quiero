@@ -176,6 +176,65 @@ CREATE POLICY "public_insert_comments" ON comments FOR INSERT WITH CHECK (true);
 
 -- Discount codes: solo validar por código (lectura filtrada)
 CREATE POLICY "public_read_discount_codes" ON discount_codes FOR SELECT USING (active = true);
+-- Permite incrementar used_count al aplicar un código en el checkout público
+CREATE POLICY "public_update_discount_usage" ON discount_codes FOR UPDATE USING (active = true) WITH CHECK (active = true);
+
+-- ============================================
+-- POLÍTICAS DE ADMINISTRADOR (usuario autenticado)
+-- El panel admin inicia sesión vía Supabase Auth
+-- (email fijo + contraseña con hash bcrypt). Una vez
+-- autenticado, auth.role() = 'authenticated' y estas
+-- políticas habilitan lectura completa + escritura.
+-- ============================================
+
+-- PRODUCTS — admin ve todo (incluso inactivos) y puede escribir
+CREATE POLICY "admin_read_products"   ON products FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_insert_products" ON products FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_products" ON products FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_products" ON products FOR DELETE USING (auth.role() = 'authenticated');
+
+-- CATEGORIES
+CREATE POLICY "admin_read_categories"   ON categories FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_insert_categories" ON categories FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_categories" ON categories FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_categories" ON categories FOR DELETE USING (auth.role() = 'authenticated');
+
+-- CAROUSELS
+CREATE POLICY "admin_read_carousels"   ON carousels FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_insert_carousels" ON carousels FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_carousels" ON carousels FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_carousels" ON carousels FOR DELETE USING (auth.role() = 'authenticated');
+
+-- SECTIONS
+CREATE POLICY "admin_read_sections"   ON sections FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_insert_sections" ON sections FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_sections" ON sections FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_sections" ON sections FOR DELETE USING (auth.role() = 'authenticated');
+
+-- ANNOUNCEMENTS
+CREATE POLICY "admin_read_announcements"   ON announcements FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_insert_announcements" ON announcements FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_announcements" ON announcements FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_announcements" ON announcements FOR DELETE USING (auth.role() = 'authenticated');
+
+-- DISCOUNT CODES — admin necesita ver todos (activos e inactivos) y gestionarlos
+CREATE POLICY "admin_read_discount_codes"   ON discount_codes FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_insert_discount_codes" ON discount_codes FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_discount_codes" ON discount_codes FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_discount_codes" ON discount_codes FOR DELETE USING (auth.role() = 'authenticated');
+
+-- ORDERS — admin lee y actualiza estado de pedidos
+CREATE POLICY "admin_read_orders"   ON orders FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_orders" ON orders FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_orders" ON orders FOR DELETE USING (auth.role() = 'authenticated');
+
+-- COMMENTS — admin lee los mensajes privados
+CREATE POLICY "admin_read_comments" ON comments FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_delete_comments" ON comments FOR DELETE USING (auth.role() = 'authenticated');
+
+-- SITE CONFIG — admin actualiza configuración general
+CREATE POLICY "admin_insert_config" ON site_config FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "admin_update_config" ON site_config FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 
 -- ============================================
 -- AUTO-UPDATE updated_at
@@ -201,3 +260,45 @@ INSERT INTO categories (name, slug, icon, sort_order) VALUES
   ('Baño', 'bano', 'droplets', 6),
   ('Juguetes', 'juguetes', 'star', 7),
   ('Accesorios', 'accesorios', 'tag', 8);
+
+-- ============================================
+-- STORAGE — bucket de imágenes de productos
+-- ============================================
+-- Esto NO se puede crear por SQL Editor directamente.
+-- Pasos manuales en el dashboard de Supabase:
+--
+-- 1. Storage → New bucket → nombre: product-images → Public bucket: ON
+-- 2. Storage → product-images → Policies → New policy → For full customization
+--
+--    Policy 1 — Lectura pública
+--      Nombre: public_read_images
+--      Allowed operation: SELECT
+--      Target roles: (dejar vacío = todos)
+--      USING expression:
+--        bucket_id = 'product-images'
+--
+--    Policy 2 — Solo admin sube/edita/borra
+--      Nombre: admin_write_images
+--      Allowed operation: INSERT, UPDATE, DELETE
+--      Target roles: authenticated
+--      USING / WITH CHECK expression:
+--        bucket_id = 'product-images' AND auth.role() = 'authenticated'
+
+-- ============================================
+-- USUARIO ADMINISTRADOR (Supabase Auth)
+-- ============================================
+-- La contraseña del panel admin NO se guarda en esta base
+-- de datos ni en el código fuente. Se gestiona 100% a través
+-- de Supabase Auth (hash bcrypt, gestionado por Supabase).
+--
+-- Pasos para crear el usuario admin:
+-- 1. Authentication → Users → Add user → Create new user
+-- 2. Email: admin@loquiero.com
+-- 3. Password: la que elijas (podés cambiarla luego desde
+--    el panel admin → Configuración → Cambiar contraseña)
+-- 4. Marcar "Auto Confirm User"
+--
+-- El admin.html usa ese mismo email fijo internamente
+-- (variable ADMIN_EMAIL en script_admin.js) y la persona
+-- que administra el sitio solo necesita escribir la
+-- contraseña — nunca ve ni necesita el email.

@@ -1,17 +1,7 @@
 {
-  "version": 2,
-  "name": "lo-quiero",
-  "builds": [
-    { "src": "public/**", "use": "@vercel/static" },
-    { "src": "admin/**", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/admin/(.*)", "dest": "/admin/$1" },
-    { "src": "/(.*)", "dest": "/public/$1" }
-  ],
   "headers": [
     {
-      "source": "/admin/(.*)",
+      "source": "/admin.html",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex" },
         { "key": "X-Frame-Options", "value": "DENY" },
