@@ -168,14 +168,12 @@ input, select, textarea { font-family: inherit; }
 .btn-primary {
   background: var(--accent);
   color: white;
-  box-shadow: 0 2px 12px rgba(232,80,2,.30);
 }
 .btn-primary:hover { background: var(--accent-hover); }
 
 .btn-wa {
   background: var(--wa-green);
   color: white;
-  box-shadow: 0 3px 16px rgba(37,211,102,.35);
   font-size: 0.95rem;
   height: 48px;
   border-radius: var(--r-lg);
@@ -305,9 +303,16 @@ input, select, textarea { font-family: inherit; }
 .header-logo .excl { color: var(--accent); }
 
 .header-search-wrap {
-  flex: 1;
-  max-width: 520px;
+  flex: 1 1 380px;
+  max-width: 380px;
   position: relative;
+  transition: max-width var(--t-slow), flex-basis var(--t-slow);
+}
+/* Al enfocar, la barra "desliza" el resto del header hacia los costados
+   creciendo hasta ocupar más espacio disponible */
+.header-search-wrap:focus-within {
+  flex-basis: 620px;
+  max-width: 620px;
 }
 @media (max-width: 768px) {
   .header-search-wrap { display: none; }
@@ -378,15 +383,36 @@ input, select, textarea { font-family: inherit; }
   display: flex;
   align-items: center;
   gap: var(--sp-1);
-  margin-left: auto;
+  flex-shrink: 0;
 }
-/* Íconos del header siempre claros (blanco) sobre el fondo oscuro de la píldora */
+/* Íconos del header siempre claros (blanco) sobre el fondo oscuro de la píldora.
+   Al pasar el mouse (o estar activos), se recolorean a naranja sólido. */
 .header-actions .btn-icon {
   color: rgba(255,255,255,.92);
   position: relative;
 }
-.header-actions .btn-icon:hover { background: rgba(255,255,255,.14); color: var(--brand-amber-light); }
-.header-actions .btn-icon.active { color: var(--brand-amber-light); }
+.header-actions .btn-icon:hover,
+.header-actions .btn-icon.active,
+.header-actions .dropdown.open .btn-icon {
+  background: var(--accent);
+  color: white;
+}
+.header-filter-dropdown { position: relative; }
+.header-filter-dropdown .dropdown-panel {
+  left: auto;
+  right: 0;
+}
+.header-filter-dropdown .filter-active-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand-amber);
+  border: 2px solid var(--brown-900);
+  display: inline-block;
+}
 
 /* SEARCH DROPDOWN */
 .search-dropdown {
@@ -424,6 +450,62 @@ input, select, textarea { font-family: inherit; }
 }
 .search-result-info p { font-size: 0.88rem; font-weight: 600; }
 .search-result-info span { font-size: 0.82rem; color: var(--accent); font-weight: 700; }
+.search-no-results {
+  padding: var(--sp-5) var(--sp-4);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-3);
+}
+
+/* Sugerencias / historial de búsqueda */
+.search-suggest-section { padding: var(--sp-3) var(--sp-4); }
+.search-suggest-section + .search-suggest-section { border-top: 1px solid var(--border); }
+.search-suggest-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  margin-bottom: var(--sp-2);
+}
+.search-suggest-clear {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+.search-suggest-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.search-suggest-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--r-full);
+  background: var(--bg);
+  color: var(--text-2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.search-suggest-chip:hover { background: var(--brand-orange-pale); color: var(--accent); }
+.search-suggest-chip-x {
+  border: none;
+  background: none;
+  color: var(--text-3);
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0 0 0 2px;
+  cursor: pointer;
+}
+.search-suggest-chip-x:hover { color: #e63946; }
 
 /* ============================================
    TOOLBAR (Categorías / Filtros dropdowns)
@@ -444,6 +526,51 @@ input, select, textarea { font-family: inherit; }
 }
 @media (max-width: 768px) {
   .toolbar-inner { padding: var(--sp-2) var(--sp-3) var(--sp-2); gap: var(--sp-2); }
+}
+
+/* Categorías como fila de círculos con ícono + etiqueta */
+.category-row {
+  overflow-x: auto;
+  scrollbar-width: none;
+  justify-content: flex-start;
+}
+.category-row::-webkit-scrollbar { display: none; }
+.cat-circle-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 2px;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+.cat-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brown-900);
+  color: white;
+  transition: background var(--t-fast), transform var(--t-fast);
+}
+.cat-circle-btn:hover .cat-circle,
+.cat-circle-btn.active .cat-circle {
+  background: var(--accent);
+}
+.cat-circle-btn:active .cat-circle { transform: scale(0.94); }
+.cat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.cat-circle-btn.active .cat-label,
+.cat-circle-btn:hover .cat-label {
+  color: var(--accent);
 }
 
 /* Dropdown */
@@ -521,6 +648,7 @@ input, select, textarea { font-family: inherit; }
 @media (max-width: 768px) {
   .dropdown-panel { left: 0; right: 0; min-width: 0; max-width: none; }
   .dropdown-panel.filter-panel { left: 0; right: 0; }
+  .header-filter-dropdown .dropdown-panel { left: 0; right: 0; }
 }
 
 /* Filter chips */
@@ -840,7 +968,6 @@ input, select, textarea { font-family: inherit; }
   justify-content: center;
   color: var(--brown-200);
   transition: all var(--t-fast);
-  box-shadow: var(--shadow-sm);
 }
 .card-fav:hover { background: white; color: #e63946; transform: scale(1.1); }
 .card-fav.saved { color: #e63946; background: white; }
@@ -1000,7 +1127,7 @@ input, select, textarea { font-family: inherit; }
   height: 40px;
   border-radius: var(--r-full);
   background: var(--surface);
-  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--border);
   color: var(--text-2);
   display: none;
   align-items: center;
@@ -1037,7 +1164,7 @@ input, select, textarea { font-family: inherit; }
   height: 40px;
   border-radius: 50%;
   background: var(--surface);
-  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;

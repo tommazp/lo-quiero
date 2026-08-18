@@ -60,66 +60,11 @@
 
   <!-- Actions -->
   <div class="header-actions">
-    <!-- Favorites -->
-    <button class="btn-icon" id="btnFavs" aria-label="Favoritos" title="Favoritos">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      <span class="badge" id="favsBadge" style="display:none">0</span>
-    </button>
-    <!-- Cart -->
-    <button class="btn-icon" id="btnCart" aria-label="Carrito" title="Carrito">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span class="badge" id="cartBadge" style="display:none">0</span>
-    </button>
-  </div>
-</header>
-</div>
-
-<!-- ==================== MOBILE SEARCH OVERLAY ==================== -->
-<div class="mobile-search-overlay" id="mobileSearchOverlay">
-  <div class="header-search-wrap">
-    <span class="header-search-icon" aria-hidden="true">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    </span>
-    <input
-      type="search"
-      class="header-search"
-      id="mobileSearchInput"
-      placeholder="Buscar productos…"
-      autocomplete="off"
-      aria-label="Buscar productos"
-    />
-    <div class="search-dropdown" id="mobileSearchDropdown" role="listbox" aria-label="Resultados de búsqueda"></div>
-  </div>
-  <span class="mobile-search-cancel" onclick="closeMobileSearch()">Cancelar</span>
-</div>
-
-<!-- ==================== TOOLBAR (Categorías / Filtros dropdowns) ==================== -->
-<nav class="toolbar" aria-label="Categorías y filtros">
-  <div class="toolbar-inner">
-
-    <!-- Categorías dropdown -->
-    <div class="dropdown" id="catDropdown">
-      <button class="dropdown-btn" onclick="toggleDropdown('catDropdown',event)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Categorías
-        <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="dropdown-panel" id="catDropdownPanel">
-        <button class="dropdown-item active" data-cat="all" onclick="filterCategory('all', this)">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          Todo
-        </button>
-        <!-- More populated by JS -->
-      </div>
-    </div>
-
-    <!-- Filtros dropdown -->
-    <div class="dropdown" id="filterDropdown">
-      <button class="dropdown-btn" onclick="toggleDropdown('filterDropdown',event)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="16" y2="18"/></svg>
-        Filtros
+    <!-- Filtros -->
+    <div class="dropdown header-filter-dropdown" id="filterDropdown">
+      <button class="btn-icon" onclick="toggleDropdown('filterDropdown',event)" aria-label="Filtros" title="Filtros">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="16" y2="6"/><circle cx="19" cy="6" r="2"/><line x1="8" y1="12" x2="20" y2="12"/><circle cx="5" cy="12" r="2"/><line x1="4" y1="18" x2="16" y2="18"/><circle cx="19" cy="18" r="2"/></svg>
         <span class="filter-active-dot" id="filterActiveDot" style="display:none"></span>
-        <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="dropdown-panel filter-panel" id="filterDropdownPanel">
         <div class="filter-group">
@@ -158,7 +103,43 @@
         </button>
       </div>
     </div>
+    <!-- Favorites -->
+    <button class="btn-icon" id="btnFavs" aria-label="Favoritos" title="Favoritos">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="badge" id="favsBadge" style="display:none">0</span>
+    </button>
+    <!-- Cart -->
+    <button class="btn-icon" id="btnCart" aria-label="Carrito" title="Carrito">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="badge" id="cartBadge" style="display:none">0</span>
+    </button>
+  </div>
+</header>
+</div>
 
+<!-- ==================== MOBILE SEARCH OVERLAY ==================== -->
+<div class="mobile-search-overlay" id="mobileSearchOverlay">
+  <div class="header-search-wrap">
+    <span class="header-search-icon" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </span>
+    <input
+      type="search"
+      class="header-search"
+      id="mobileSearchInput"
+      placeholder="Buscar productos…"
+      autocomplete="off"
+      aria-label="Buscar productos"
+    />
+    <div class="search-dropdown" id="mobileSearchDropdown" role="listbox" aria-label="Resultados de búsqueda"></div>
+  </div>
+  <span class="mobile-search-cancel" onclick="closeMobileSearch()">Cancelar</span>
+</div>
+
+<!-- ==================== TOOLBAR (Categorías en círculos) ==================== -->
+<nav class="toolbar" aria-label="Categorías">
+  <div class="toolbar-inner category-row" id="categoryRow">
+    <!-- Populado por JS: un botón circular por categoría, "Todo" incluido -->
   </div>
 </nav>
 
@@ -243,14 +224,6 @@
     <div>
       <div class="footer-logo">LO QUIERO!</div>
       <p class="footer-desc">Tu tienda de confianza. Tecnología, hogar, cocina, blanquería y mucho más. Encargá por WhatsApp sin complicaciones.</p>
-      <div class="footer-social">
-        <a href="https://wa.me/5493445440326" id="footerWaIcon" class="footer-social-link" target="_blank" rel="noopener" aria-label="WhatsApp">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </a>
-        <a href="https://instagram.com/loquiero.tienda" id="footerIgIcon" class="footer-social-link" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-      </div>
     </div>
     <div>
       <div class="footer-col-title">Categorías</div>
@@ -268,10 +241,6 @@
   </div>
   <div class="footer-bottom">
     <span>© 2025 LO QUIERO! Todos los derechos reservados.</span>
-    <a href="https://wa.me/5493445440326" id="footerWaBtn" class="footer-wa-btn" target="_blank" rel="noopener">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Contactar ahora
-    </a>
   </div>
 </footer>
 
@@ -542,7 +511,7 @@ async function loadSiteConfig() {
     if (map.wa_number) {
       WA_NUMBER = map.wa_number;
       const waUrl = `https://wa.me/${WA_NUMBER}`;
-      ['footerWaIcon','footerWaText','footerWaBtn'].forEach(id => {
+      ['footerWaText'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.href = waUrl;
       });
@@ -551,7 +520,7 @@ async function loadSiteConfig() {
     }
     if (map.instagram) {
       const igUrl = `https://instagram.com/${map.instagram}`;
-      ['footerIgIcon','footerIgText'].forEach(id => {
+      ['footerIgText'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.href = igUrl;
       });
@@ -696,16 +665,32 @@ function renderCategoryCarousels() {
 // =============================================
 // RENDER CATEGORY BAR
 // =============================================
+const CATEGORY_ICONS = {
+  cpu:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>',
+  home:     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+  utensils: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>',
+  layers:   '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>',
+  shirt:    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>',
+  droplets: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/></svg>',
+  star:     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  tag:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 22l-9-9 8.59-8.59A2 2 0 0 1 13 4h6a2 2 0 0 1 2 2v6a2 2 0 0 1-.41 1.41z"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>',
+  all:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>'
+};
+
 function renderCategoryBar() {
-  const inner = document.getElementById('catDropdownPanel');
-  const catIcons = { cpu:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>', home:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>', utensils:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>', layers:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>', shirt:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>', droplets:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/></svg>' };
+  const row = document.getElementById('categoryRow');
+  if (!row) return;
+  const allBtn = `
+    <button class="cat-circle-btn active" data-cat="all" onclick="filterCategory('all', this)">
+      <span class="cat-circle">${CATEGORY_ICONS.all}</span>
+      <span class="cat-label">Todo</span>
+    </button>`;
   const items = categories.map(c => `
-    <button class="dropdown-item" data-cat="${c.slug}" onclick="filterCategory('${c.slug}', this)">
-      ${catIcons[c.icon] || ''}
-      ${c.name}
-    </button>
-  `).join('');
-  inner.innerHTML = inner.children[0].outerHTML + items;
+    <button class="cat-circle-btn" data-cat="${c.slug}" onclick="filterCategory('${c.slug}', this)">
+      <span class="cat-circle">${CATEGORY_ICONS[c.icon] || CATEGORY_ICONS.all}</span>
+      <span class="cat-label">${c.name}</span>
+    </button>`).join('');
+  row.innerHTML = allBtn + items;
 }
 
 function renderFooterCats() {
@@ -811,12 +796,11 @@ function renderProductCard(p) {
 // =============================================
 window.filterCategory = function(slug, btn) {
   activeFilters.category = slug;
-  document.querySelectorAll('.dropdown-item[data-cat]').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.cat-circle-btn[data-cat]').forEach(p => p.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  else document.querySelector(`.dropdown-item[data-cat="${slug}"]`)?.classList.add('active');
+  else document.querySelector(`.cat-circle-btn[data-cat="${slug}"]`)?.classList.add('active');
   applyFilters();
   document.getElementById('gridTitle').textContent = slug === 'all' ? 'Todos los productos' : (categories.find(c=>c.slug===slug)?.name || 'Productos');
-  closeDropdown('catDropdown');
   // Si vino de un "Ver todo" de un carrusel de categoría (sin btn), llevamos la vista a la grilla
   if (!btn) document.getElementById('allProductsSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
@@ -833,7 +817,7 @@ window.clearFilters = function() {
   activeFilters = { category: 'all', status: 'all', stock: 'all', offer: null, q: '' };
   document.getElementById('searchInput').value = '';
   document.querySelectorAll('.filter-chip').forEach(c => { c.classList.remove('active'); if (c.dataset.val === 'all') c.classList.add('active'); });
-  document.querySelectorAll('.dropdown-item[data-cat]').forEach(p => { p.classList.remove('active'); if (p.dataset.cat === 'all') p.classList.add('active'); });
+  document.querySelectorAll('.cat-circle-btn[data-cat]').forEach(p => { p.classList.remove('active'); if (p.dataset.cat === 'all') p.classList.add('active'); });
   document.getElementById('priceMin').value = '';
   document.getElementById('priceMax').value = '';
   document.getElementById('gridTitle').textContent = 'Todos los productos';
@@ -889,6 +873,30 @@ window.applyFilters = function() {
 // =============================================
 // SEARCH
 // =============================================
+const SEARCH_HISTORY_KEY = 'lq_search_history';
+
+function getSearchHistory() {
+  try { return JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || '[]'); }
+  catch { return []; }
+}
+function addSearchHistory(term) {
+  term = (term || '').trim();
+  if (!term) return;
+  let hist = getSearchHistory().filter(t => t.toLowerCase() !== term.toLowerCase());
+  hist.unshift(term);
+  hist = hist.slice(0, 6);
+  localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(hist));
+}
+window.removeSearchHistoryItem = function(term, dropdownId) {
+  const hist = getSearchHistory().filter(t => t !== term);
+  localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(hist));
+  renderSearchSuggestions(dropdownId);
+};
+window.clearSearchHistory = function(dropdownId) {
+  localStorage.removeItem(SEARCH_HISTORY_KEY);
+  renderSearchSuggestions(dropdownId);
+};
+
 function setupSearch() {
   setupSearchInput('searchInput', 'searchDropdown');
   setupSearchInput('mobileSearchInput', 'mobileSearchDropdown');
@@ -900,6 +908,10 @@ function setupSearchInput(inputId, dropdownId) {
   if (!input || !dropdown) return;
   let timer;
 
+  input.addEventListener('focus', () => {
+    if (!input.value.trim()) renderSearchSuggestions(dropdownId);
+  });
+
   input.addEventListener('input', () => {
     clearTimeout(timer);
     const q = input.value.trim();
@@ -908,7 +920,7 @@ function setupSearchInput(inputId, dropdownId) {
     const other = inputId === 'searchInput' ? document.getElementById('mobileSearchInput') : document.getElementById('searchInput');
     if (other && other.value !== q) other.value = q;
 
-    if (!q) { dropdown.classList.remove('open'); applyFilters(); return; }
+    if (!q) { renderSearchSuggestions(dropdownId); applyFilters(); return; }
     timer = setTimeout(() => {
       const results = allProducts.filter(p =>
         p.name.toLowerCase().includes(q.toLowerCase()) ||
@@ -933,13 +945,65 @@ window.closeMobileSearch = function() {
   document.getElementById('mobileSearchDropdown').classList.remove('open');
 };
 
+// Sugerencias: se muestran cuando el buscador está vacío (foco sin escribir)
+// — combina el historial de búsquedas del usuario con ejemplos de categorías.
+function renderSearchSuggestions(dropdownId = 'searchDropdown') {
+  const dropdown = document.getElementById(dropdownId);
+  if (!dropdown) return;
+  const history = getSearchHistory();
+  const examples = categories.slice(0, 6).map(c => c.name);
+
+  if (!history.length && !examples.length) { dropdown.classList.remove('open'); return; }
+
+  const historyHtml = history.length ? `
+    <div class="search-suggest-section">
+      <div class="search-suggest-header">
+        <span>Búsquedas recientes</span>
+        <button type="button" class="search-suggest-clear" onclick="clearSearchHistory('${dropdownId}')">Borrar</button>
+      </div>
+      <div class="search-suggest-chips">
+        ${history.map(t => `
+          <span class="search-suggest-chip" onclick="runSuggestedSearch('${t.replace(/'/g,"\\'")}','${dropdownId}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+            ${t}
+            <button type="button" class="search-suggest-chip-x" onclick="event.stopPropagation();removeSearchHistoryItem('${t.replace(/'/g,"\\'")}','${dropdownId}')" aria-label="Quitar">×</button>
+          </span>`).join('')}
+      </div>
+    </div>` : '';
+
+  const examplesHtml = examples.length ? `
+    <div class="search-suggest-section">
+      <div class="search-suggest-header"><span>Te puede interesar</span></div>
+      <div class="search-suggest-chips">
+        ${examples.map(t => `
+          <span class="search-suggest-chip" onclick="runSuggestedSearch('${t.replace(/'/g,"\\'")}','${dropdownId}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            ${t}
+          </span>`).join('')}
+      </div>
+    </div>` : '';
+
+  dropdown.innerHTML = historyHtml + examplesHtml;
+  dropdown.classList.add('open');
+}
+
+window.runSuggestedSearch = function(term, dropdownId) {
+  const inputId = dropdownId === 'mobileSearchDropdown' ? 'mobileSearchInput' : 'searchInput';
+  const input = document.getElementById(inputId);
+  if (input) { input.value = term; input.dispatchEvent(new Event('input')); }
+};
+
 function renderSearchDropdown(results, q, dropdownId = 'searchDropdown') {
   const dropdown = document.getElementById(dropdownId);
-  if (!results.length) { dropdown.classList.remove('open'); return; }
+  if (!results.length) {
+    dropdown.innerHTML = `<div class="search-no-results">Sin resultados para "${q}"</div>`;
+    dropdown.classList.add('open');
+    return;
+  }
   dropdown.innerHTML = results.map(p => {
     const img = p.images?.[0] ? `<img class="search-result-img" src="${p.images[0]}" alt="${p.name}" />` : `<div class="search-result-img" style="display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brown-200)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg></div>`;
     const highlighted = p.name.replace(new RegExp(q, 'gi'), m => `<mark style="background:var(--brand-amber-pale);color:var(--accent)">${m}</mark>`);
-    return `<div class="search-result-item" onclick="openProduct('${p.id}');document.getElementById('${dropdownId}').classList.remove('open');closeMobileSearch()" role="option">
+    return `<div class="search-result-item" onclick="addSearchHistory('${q.replace(/'/g,"\\'")}');openProduct('${p.id}');document.getElementById('${dropdownId}').classList.remove('open');closeMobileSearch()" role="option">
       ${img}
       <div class="search-result-info"><p>${highlighted}</p><span>$${Number(p.price).toLocaleString('es-AR')}</span></div>
     </div>`;
