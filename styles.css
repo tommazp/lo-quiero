@@ -303,16 +303,15 @@ input, select, textarea { font-family: inherit; }
 .header-logo .excl { color: var(--accent); }
 
 .header-search-wrap {
-  flex: 1 1 380px;
-  max-width: 380px;
+  flex: 1 1 auto;
+  max-width: 900px;
   position: relative;
   transition: max-width var(--t-slow), flex-basis var(--t-slow);
 }
-/* Al enfocar, la barra "desliza" el resto del header hacia los costados
-   creciendo hasta ocupar más espacio disponible */
+/* Al enfocar, la barra "desliza" un poco más hacia los costados,
+   ganando el espacio que dejan libre los íconos */
 .header-search-wrap:focus-within {
-  flex-basis: 620px;
-  max-width: 620px;
+  max-width: 960px;
 }
 @media (max-width: 768px) {
   .header-search-wrap { display: none; }
