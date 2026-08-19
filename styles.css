@@ -260,7 +260,8 @@ input, select, textarea { font-family: inherit; }
    HEADER
    ============================================ */
 /* ============================================
-   HEADER — floating island
+   HEADER — floating island, se oculta al bajar el scroll
+   y reaparece apenas subís
    ============================================ */
 .header-wrap {
   position: sticky;
@@ -268,7 +269,9 @@ input, select, textarea { font-family: inherit; }
   z-index: 90;
   padding: var(--sp-3) var(--sp-5) 0;
   background: var(--bg);
+  transition: transform var(--t-slow), opacity var(--t-base);
 }
+.header-wrap.nav-hidden { transform: translateY(-140%); }
 @media (max-width: 768px) {
   .header-wrap { padding: var(--sp-2) var(--sp-3) 0; }
 }
@@ -285,7 +288,7 @@ input, select, textarea { font-family: inherit; }
   box-shadow: var(--shadow-md);
 }
 @media (max-width: 768px) {
-  .site-header { padding: 0 var(--sp-3); gap: var(--sp-2); border-radius: var(--r-xl); }
+  .site-header { padding: 0 var(--sp-3); gap: var(--sp-2); border-radius: var(--r-full); }
 }
 
 .header-logo {
@@ -383,6 +386,7 @@ input, select, textarea { font-family: inherit; }
   align-items: center;
   gap: var(--sp-1);
   flex-shrink: 0;
+  margin-left: auto;
 }
 /* Íconos del header siempre claros (blanco) sobre el fondo oscuro de la píldora.
    Al pasar el mouse (o estar activos), se recolorean a naranja sólido. */
@@ -509,14 +513,17 @@ input, select, textarea { font-family: inherit; }
 .search-suggest-chip-x:hover { color: #e63946; }
 
 /* ============================================
-   TOOLBAR (Categorías / Filtros dropdowns)
+   TOOLBAR (Categorías) — solo visible en inicio/catálogo,
+   flota junto con el header y se oculta con el mismo scroll
    ============================================ */
 .toolbar {
   background: transparent;
   position: sticky;
   top: calc(var(--header-h) + var(--sp-3));
   z-index: 80;
+  transition: transform var(--t-slow), opacity var(--t-base);
 }
+.toolbar.nav-hidden { transform: translateY(-140%); }
 .toolbar-inner {
   display: flex;
   align-items: center;
@@ -1224,6 +1231,26 @@ input, select, textarea { font-family: inherit; }
 }
 .detail-gallery-fav:hover { color: #e63946; transform: scale(1.08); }
 .detail-gallery-fav.saved { color: #e63946; }
+.detail-gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.85);
+  color: var(--text-1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.detail-gallery-nav:hover { background: var(--surface); color: var(--accent); }
+.detail-gallery-nav.prev { left: var(--sp-3); }
+.detail-gallery-nav.next { right: var(--sp-3); }
 .gallery-thumbs {
   display: flex;
   gap: var(--sp-2);
@@ -1285,8 +1312,10 @@ input, select, textarea { font-family: inherit; }
     align-items: flex-start;
     gap: var(--sp-8);
   }
-  .detail-gallery-col { flex: 1.1; min-width: 0; }
-  .detail-info-col { flex: 1; min-width: 0; max-width: 380px; }
+  /* Imagen más chica en compu para que entren la foto, las miniaturas
+     y los datos del producto sin tener que scrollear tanto */
+  .detail-gallery-col { flex: 0 0 420px; max-width: 420px; min-width: 0; }
+  .detail-info-col { flex: 1; min-width: 0; max-width: 460px; }
   .detail-gallery { margin-bottom: 0; aspect-ratio: 1; }
 }
 
