@@ -28,19 +28,13 @@
 
 <!-- ==================== HEADER ==================== -->
 <div class="header-wrap">
-<header class="site-header">
+<header class="site-header" id="siteHeader">
   <!-- Logo -->
-  <a href="/" class="header-logo" aria-label="LO QUIERO! inicio">
-    <!--<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="32" height="32" rx="8" fill="#E85002"/>
-      <path d="M8 11c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.21-1.79 4-4 4" stroke="#FFA500" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M16 11c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.21-1.79 4-4 4" stroke="#FFD166" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M7 15c0 5 3.5 9 9 10 5.5-1 9-5 9-10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-    </svg> -->
+  <a href="/" class="header-logo" id="headerLogo" aria-label="LO QUIERO! inicio">
     <span>LO <span class="excl">QUIERO!</span></span>
   </a>
 
-  <!-- Search -->
+  <!-- Search (desktop) -->
   <div class="header-search-wrap">
     <span class="header-search-icon" aria-hidden="true">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -56,6 +50,22 @@
       aria-controls="searchDropdown"
     />
     <div class="search-dropdown" id="searchDropdown" role="listbox" aria-label="Resultados de búsqueda"></div>
+  </div>
+
+  <!-- Search (mobile — se desliza in-line reemplazando el logo) -->
+  <div class="header-mobile-search-wrap" id="headerMobileSearchWrap">
+    <span class="header-search-icon" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </span>
+    <input
+      type="search"
+      class="header-search"
+      id="mobileSearchInput"
+      placeholder="Buscar productos…"
+      autocomplete="off"
+      aria-label="Buscar productos"
+    />
+    <div class="search-dropdown" id="mobileSearchDropdown" role="listbox" aria-label="Resultados de búsqueda"></div>
   </div>
 
   <!-- Actions -->
@@ -86,9 +96,9 @@
         <div class="filter-group">
           <div class="filter-group-label">Precio</div>
           <div class="price-inputs">
-            <input type="number" class="price-input" id="priceMin" placeholder="Mín $" min="0" oninput="applyFilters();updateFilterActiveDot()" aria-label="Precio mínimo" />
+            <input type="number" class="price-input" id="priceMin" placeholder="Mín $" min="0" oninput="onFiltersChanged();updateFilterActiveDot()" aria-label="Precio mínimo" />
             <span class="price-sep">—</span>
-            <input type="number" class="price-input" id="priceMax" placeholder="Máx $" min="0" oninput="applyFilters();updateFilterActiveDot()" aria-label="Precio máximo" />
+            <input type="number" class="price-input" id="priceMax" placeholder="Máx $" min="0" oninput="onFiltersChanged();updateFilterActiveDot()" aria-label="Precio máximo" />
           </div>
         </div>
         <div class="filter-group">
@@ -117,25 +127,6 @@
 </header>
 </div>
 
-<!-- ==================== MOBILE SEARCH OVERLAY ==================== -->
-<div class="mobile-search-overlay" id="mobileSearchOverlay">
-  <div class="header-search-wrap">
-    <span class="header-search-icon" aria-hidden="true">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    </span>
-    <input
-      type="search"
-      class="header-search"
-      id="mobileSearchInput"
-      placeholder="Buscar productos…"
-      autocomplete="off"
-      aria-label="Buscar productos"
-    />
-    <div class="search-dropdown" id="mobileSearchDropdown" role="listbox" aria-label="Resultados de búsqueda"></div>
-  </div>
-  <span class="mobile-search-cancel" onclick="closeMobileSearch()">Cancelar</span>
-</div>
-
 <!-- ==================== TOOLBAR (Categorías en círculos) ==================== -->
 <nav class="toolbar" aria-label="Categorías">
   <div class="toolbar-inner category-row" id="categoryRow">
@@ -148,6 +139,8 @@
 
   <!-- ==================== CATALOG MAIN ==================== -->
   <main class="catalog-main" id="catalogMain">
+
+    <div id="catalogView">
 
     <!-- Hero Carousel -->
     <section class="hero-carousel" id="heroCarousel" aria-label="Novedades" style="display:none">
@@ -170,7 +163,7 @@
         <h2 class="section-title" id="gridTitle">Todos los productos</h2>
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-size:0.8rem;color:var(--text-3)" id="resultCount"></span>
-          <select id="sortSelect" onchange="applyFilters()" style="padding:4px 8px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:0.82rem;color:var(--text-1);background:var(--surface);outline:none;cursor:pointer" aria-label="Ordenar">
+          <select id="sortSelect" onchange="onFiltersChanged()" style="padding:4px 8px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:0.82rem;color:var(--text-1);background:var(--surface);outline:none;cursor:pointer" aria-label="Ordenar">
             <option value="default">Destacados</option>
             <option value="price-asc">Menor precio</option>
             <option value="price-desc">Mayor precio</option>
@@ -195,6 +188,8 @@
         <p style="font-size:0.88rem;color:var(--text-3)">Probá con otros filtros o términos de búsqueda</p>
         <button class="btn btn-outline" style="margin-top:16px" onclick="clearFilters()">Limpiar filtros</button>
       </div>
+      <!-- Paginación -->
+      <nav class="pagination" id="paginationControls" aria-label="Paginación de productos"></nav>
     </section>
 
     <!-- Comment section (bottom) -->
@@ -212,6 +207,19 @@
           Enviar por WhatsApp
         </button>
       </div>
+    </div>
+
+    </div><!-- /catalogView -->
+
+    <!-- ==================== PRODUCT PAGE (reemplaza al catálogo, con historial real) ==================== -->
+    <div id="productPageView" style="display:none">
+      <button class="product-page-back" id="productPageBack" onclick="closeProductPage()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Volver
+      </button>
+      <div class="product-page-breadcrumb" id="productPageBreadcrumb"></div>
+      <div id="productPageContent"></div>
+      <div id="productPageRelated"></div>
     </div>
 
   </main>
@@ -298,30 +306,6 @@
   </div>
   <div class="cart-body" id="favsBody"></div>
 </aside>
-
-<!-- ==================== PRODUCT DETAIL MODAL ==================== -->
-<div class="modal-overlay" id="productModal" onclick="closeProductModal(event)" role="dialog" aria-modal="true" aria-label="Detalle del producto">
-  <div class="modal-sheet" id="productModalSheet">
-    <div class="modal-handle"></div>
-    <button class="modal-close" onclick="closeProductModal()" aria-label="Volver">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <div id="productModalContent"></div>
-  </div>
-</div>
-
-<!-- ==================== MOBILE FILTERS SHEET ==================== -->
-<div class="modal-overlay" id="filtersModal" onclick="closeFiltersMobile(event)" style="z-index:350">
-  <div class="modal-sheet" style="max-width:100%;padding:24px">
-    <div class="modal-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <h3 style="font-family:var(--font-display);font-weight:800">Filtros</h3>
-      <button class="btn-icon" onclick="closeFiltersMobile()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div id="mobileFiltersContent"></div>
-    <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="closeFiltersMobile()">Ver resultados</button>
-  </div>
-</div>
 
 <!-- ==================== TOAST CONTAINER ==================== -->
 <div class="toast-container" id="toastContainer" aria-live="polite"></div>
@@ -494,12 +478,16 @@ async function init() {
 
   setupSearch();
   setupSidebar();
-  setupModalDrag();
+  window.addEventListener('popstate', handlePopState);
 
   // Show comment section at bottom on desktop
   if (window.innerWidth >= 769) {
     document.getElementById('commentSectionBottom').style.display = 'block';
   }
+
+  // Soporta entrar directo a un producto por URL (?p=id) o volver con el navegador
+  const initialId = new URLSearchParams(location.search).get('p');
+  if (initialId) openProduct(initialId, { fromPopstate: true });
 }
 
 async function loadSiteConfig() {
@@ -794,12 +782,22 @@ function renderProductCard(p) {
 // =============================================
 // FILTERS
 // =============================================
+const PRODUCTS_PER_PAGE = 12;
+let currentPage = 1;
+let lastFilteredCount = 0;
+
+// Cambios de categoría/filtro/orden/búsqueda vuelven siempre a la página 1
+window.onFiltersChanged = function() {
+  currentPage = 1;
+  applyFilters();
+};
+
 window.filterCategory = function(slug, btn) {
   activeFilters.category = slug;
   document.querySelectorAll('.cat-circle-btn[data-cat]').forEach(p => p.classList.remove('active'));
   if (btn) btn.classList.add('active');
   else document.querySelector(`.cat-circle-btn[data-cat="${slug}"]`)?.classList.add('active');
-  applyFilters();
+  onFiltersChanged();
   document.getElementById('gridTitle').textContent = slug === 'all' ? 'Todos los productos' : (categories.find(c=>c.slug===slug)?.name || 'Productos');
   // Si vino de un "Ver todo" de un carrusel de categoría (sin btn), llevamos la vista a la grilla
   if (!btn) document.getElementById('allProductsSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -809,19 +807,21 @@ window.setFilter = function(type, val, btn) {
   activeFilters[type] = val;
   document.querySelectorAll(`[data-filter="${type}"]`).forEach(b => b.classList.remove('active'));
   btn?.classList.add('active');
-  applyFilters();
+  onFiltersChanged();
   updateFilterActiveDot();
 };
 
 window.clearFilters = function() {
   activeFilters = { category: 'all', status: 'all', stock: 'all', offer: null, q: '' };
   document.getElementById('searchInput').value = '';
+  const mobileInput = document.getElementById('mobileSearchInput');
+  if (mobileInput) mobileInput.value = '';
   document.querySelectorAll('.filter-chip').forEach(c => { c.classList.remove('active'); if (c.dataset.val === 'all') c.classList.add('active'); });
   document.querySelectorAll('.cat-circle-btn[data-cat]').forEach(p => { p.classList.remove('active'); if (p.dataset.cat === 'all') p.classList.add('active'); });
   document.getElementById('priceMin').value = '';
   document.getElementById('priceMax').value = '';
   document.getElementById('gridTitle').textContent = 'Todos los productos';
-  applyFilters();
+  onFiltersChanged();
   updateFilterActiveDot();
 };
 
@@ -858,17 +858,70 @@ window.applyFilters = function() {
   const grid = document.getElementById('productsGrid');
   const empty = document.getElementById('emptyState');
   const count = document.getElementById('resultCount');
+  lastFilteredCount = filtered.length;
 
   if (!filtered.length) {
     grid.innerHTML = '';
     empty.style.display = 'block';
     count.textContent = '';
+    renderPagination(0);
   } else {
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PRODUCTS_PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const pageItems = filtered.slice(start, start + PRODUCTS_PER_PAGE);
+
     empty.style.display = 'none';
-    grid.innerHTML = filtered.map(renderProductCard).join('');
+    grid.innerHTML = pageItems.map(renderProductCard).join('');
     count.textContent = `${filtered.length} producto${filtered.length !== 1 ? 's' : ''}`;
+    renderPagination(filtered.length);
   }
 };
+
+// =============================================
+// PAGINACIÓN
+// =============================================
+window.goToPage = function(n) {
+  const totalPages = Math.max(1, Math.ceil(lastFilteredCount / PRODUCTS_PER_PAGE));
+  if (n < 1 || n > totalPages || n === currentPage) return;
+  currentPage = n;
+  applyFilters();
+  document.getElementById('allProductsSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+function renderPagination(totalItems) {
+  const container = document.getElementById('paginationControls');
+  if (!container) return;
+  const totalPages = Math.max(1, Math.ceil(totalItems / PRODUCTS_PER_PAGE));
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+  // Rango compacto de números de página alrededor de la página actual
+  const nums = new Set([1, totalPages, currentPage, currentPage - 1, currentPage + 1]);
+  const sorted = [...nums].filter(n => n >= 1 && n <= totalPages).sort((a,b) => a - b);
+
+  let numbersHtml = '';
+  let prev = 0;
+  sorted.forEach(n => {
+    if (prev && n - prev > 1) numbersHtml += `<span class="page-ellipsis">…</span>`;
+    numbersHtml += `<button class="page-number ${n === currentPage ? 'active' : ''}" onclick="goToPage(${n})" aria-label="Página ${n}" ${n === currentPage ? 'aria-current="page"' : ''}>${n}</button>`;
+    prev = n;
+  });
+
+  container.innerHTML = `
+    <button class="page-nav-btn" onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''} aria-label="Primera página">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 17 13 12 18 7"/><polyline points="11 17 6 12 11 7"/></svg>
+    </button>
+    <button class="page-nav-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} aria-label="Página anterior">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="page-numbers">${numbersHtml}</div>
+    <button class="page-nav-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} aria-label="Página siguiente">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="page-nav-btn" onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''} aria-label="Última página">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 17 11 12 6 7"/><polyline points="13 17 18 12 13 7"/></svg>
+    </button>`;
+}
 
 // =============================================
 // SEARCH
@@ -916,6 +969,7 @@ function setupSearchInput(inputId, dropdownId) {
     clearTimeout(timer);
     const q = input.value.trim();
     activeFilters.q = q;
+    currentPage = 1;
     // Sync the other input
     const other = inputId === 'searchInput' ? document.getElementById('mobileSearchInput') : document.getElementById('searchInput');
     if (other && other.value !== q) other.value = q;
@@ -932,18 +986,29 @@ function setupSearchInput(inputId, dropdownId) {
   });
 
   document.addEventListener('click', e => {
-    if (!input.closest('.header-search-wrap')?.contains(e.target)) dropdown.classList.remove('open');
+    const wrap = input.closest('.header-search-wrap, .header-mobile-search-wrap');
+    if (!wrap?.contains(e.target)) dropdown.classList.remove('open');
+    // Si tocan afuera del buscador móvil con el campo vacío, lo replegamos
+    if (inputId === 'mobileSearchInput' && !wrap?.contains(e.target) && !input.value.trim()) {
+      closeMobileHeaderSearch();
+    }
   });
 }
 
-window.openMobileSearch = function() {
-  document.getElementById('mobileSearchOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('mobileSearchInput').focus(), 300);
+// =============================================
+// BÚSQUEDA MÓVIL — se desliza dentro del header (reemplaza al logo)
+// en vez de abrir una pantalla completa aparte.
+// =============================================
+window.openMobileHeaderSearch = function() {
+  document.getElementById('siteHeader').classList.add('mobile-search-active');
+  setTimeout(() => document.getElementById('mobileSearchInput').focus(), 250);
 };
-window.closeMobileSearch = function() {
-  document.getElementById('mobileSearchOverlay').classList.remove('open');
+window.closeMobileHeaderSearch = function() {
+  document.getElementById('siteHeader').classList.remove('mobile-search-active');
   document.getElementById('mobileSearchDropdown').classList.remove('open');
 };
+// Alias usados por otras partes del código (resultados de búsqueda, etc.)
+window.closeMobileSearch = window.closeMobileHeaderSearch;
 
 // Sugerencias: se muestran cuando el buscador está vacío (foco sin escribir)
 // — combina el historial de búsquedas del usuario con ejemplos de categorías.
@@ -1012,16 +1077,59 @@ function renderSearchDropdown(results, q, dropdownId = 'searchDropdown') {
 }
 
 // =============================================
-// PRODUCT DETAIL MODAL
+// PRODUCT PAGE (antes era un modal — ahora es una "página" real
+// con su propia entrada en el historial del navegador)
 // =============================================
-window.openProduct = function(id) {
+window.openProduct = function(id, opts = {}) {
   const p = allProducts.find(x => x.id === id);
   if (!p) return;
-  const modal   = document.getElementById('productModal');
-  const content = document.getElementById('productModalContent');
+  renderProductPage(p);
+  document.getElementById('catalogView').style.display = 'none';
+  document.getElementById('productPageView').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: opts.fromPopstate ? 'auto' : 'smooth' });
+  document.body.style.overflow = '';
+  closeMobileHeaderSearch();
+
+  if (!opts.fromPopstate) {
+    history.pushState({ lqProduct: id }, '', `?p=${id}`);
+  }
+};
+
+window.closeProductPage = function() {
+  // Si llegamos con historial propio, "Volver" hace lo mismo que el
+  // botón atrás del navegador/celular. Si no hay desde dónde volver
+  // (ej. entraste directo por link), vamos al catálogo igual.
+  if (history.state && history.state.lqProduct) {
+    history.back();
+  } else {
+    history.pushState(null, '', location.pathname);
+    showCatalogView();
+  }
+};
+
+function showCatalogView() {
+  document.getElementById('productPageView').style.display = 'none';
+  document.getElementById('catalogView').style.display = '';
+}
+
+function handlePopState() {
+  const pid = new URLSearchParams(location.search).get('p');
+  if (pid) openProduct(pid, { fromPopstate: true });
+  else showCatalogView();
+}
+
+function renderProductPage(p) {
   const noStock = p.stock === 0;
   const isFav   = Favs.has(p.id);
   const priceFmt = n => '$' + Number(n).toLocaleString('es-AR');
+
+  // Breadcrumb
+  const catName = p.categories?.name || '';
+  const catSlug = p.categories?.slug || '';
+  document.getElementById('productPageBreadcrumb').innerHTML = `
+    <a href="#" onclick="closeProductPage();return false">Inicio</a>
+    ${catName ? `<span>/</span><a href="#" onclick="closeProductPage();filterCategory('${catSlug}');return false">${catName}</a>` : ''}
+    <span>/</span><span class="current">${p.name}</span>`;
 
   const images = p.images?.length ? p.images : [];
   const favBtnHtml = `<button class="card-fav detail-gallery-fav ${isFav?'saved':''}" data-fav-id="${p.id}" onclick="toggleFav(event,'${p.id}')" aria-label="${isFav ? 'Quitar de favoritos' : 'Guardar en favoritos'}" aria-pressed="${isFav}">
@@ -1049,7 +1157,7 @@ window.openProduct = function(id) {
 
   const compareHtml = p.compare_price ? `<span class="detail-compare-price">$${Number(p.compare_price).toLocaleString('es-AR')}</span>` : '';
 
-  content.innerHTML = `
+  document.getElementById('productPageContent').innerHTML = `
     <div class="detail-layout">
       <div class="detail-gallery-col">
         ${gallery}
@@ -1057,7 +1165,7 @@ window.openProduct = function(id) {
       <div class="detail-info-col">
         <div class="detail-header-row">
           <div>
-            ${p.categories?.name ? `<div class="detail-category">${p.categories.name}</div>` : ''}
+            ${catName ? `<div class="detail-category">${catName}</div>` : ''}
             <h2 class="detail-name">${p.name}</h2>
           </div>
         </div>
@@ -1110,61 +1218,27 @@ window.openProduct = function(id) {
       </div>
     </div>`;
 
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-};
+  detailQty = 1;
 
-window.closeProductModal = function(e) {
-  if (e && e.target !== document.getElementById('productModal')) return;
-  document.getElementById('productModal').classList.remove('open');
-  document.body.style.overflow = '';
-};
+  // "También te puede interesar" — productos de la misma categoría
+  const related = allProducts.filter(x => x.id !== p.id && (x.categories?.slug || '') === catSlug).slice(0, 8);
+  const relatedContainer = document.getElementById('productPageRelated');
+  if (related.length) {
+    relatedContainer.innerHTML = `
+      <div class="section-header" style="margin-top:var(--sp-10)">
+        <h2 class="section-title">También te puede interesar</h2>
+      </div>
+      <div class="products-scroll">${related.map(renderProductCard).join('')}</div>`;
+  } else {
+    relatedContainer.innerHTML = '';
+  }
+}
 
 window.setDetailImg = function(src, thumb) {
   document.getElementById('detailMainImg').src = src;
   document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
   thumb.classList.add('active');
 };
-
-// =============================================
-// DRAG-TO-DISMISS (mobile modal sheet)
-// =============================================
-function setupModalDrag() {
-  const sheet = document.getElementById('productModalSheet');
-  let startY = 0, currentY = 0, dragging = false;
-
-  const onStart = (e) => {
-    if (window.innerWidth >= 769) return;
-    // Only start drag from the top handle area or when content is scrolled to top
-    if (sheet.scrollTop > 4) return;
-    startY = (e.touches ? e.touches[0].clientY : e.clientY);
-    dragging = true;
-    sheet.style.transition = 'none';
-  };
-  const onMove = (e) => {
-    if (!dragging) return;
-    currentY = (e.touches ? e.touches[0].clientY : e.clientY) - startY;
-    if (currentY < 0) currentY = 0;
-    sheet.style.transform = `translateY(${currentY}px)`;
-  };
-  const onEnd = () => {
-    if (!dragging) return;
-    dragging = false;
-    sheet.style.transition = '';
-    if (currentY > 120) {
-      closeProductModal();
-    }
-    sheet.style.transform = '';
-    currentY = 0;
-  };
-
-  sheet.addEventListener('touchstart', onStart, { passive: true });
-  sheet.addEventListener('touchmove', onMove, { passive: true });
-  sheet.addEventListener('touchend', onEnd);
-  sheet.addEventListener('mousedown', onStart);
-  document.addEventListener('mousemove', onMove);
-  document.addEventListener('mouseup', onEnd);
-}
 
 let detailQty = 1;
 window.changeDetailQty = function(delta) {
@@ -1451,28 +1525,20 @@ window.closeDropdown = function(id) {
 window.mobileNav = function(tab, btn) {
   document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  if (tab === 'search') { openMobileSearch(); }
-  else { closeMobileSearch(); }
+  if (tab === 'search') {
+    openMobileHeaderSearch();
+  } else {
+    closeMobileHeaderSearch();
+    if (tab === 'home') {
+      // Si estábamos en la página de un producto, volvemos al catálogo
+      if (document.getElementById('productPageView').style.display !== 'none') {
+        history.pushState(null, '', location.pathname);
+        showCatalogView();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
   if (tab === 'favs') openFavsDrawer();
-};
-
-window.openFiltersMobile = function() {
-  const filtersModal = document.getElementById('filtersModal');
-  // Clone filter dropdown content into mobile sheet, renaming IDs to avoid duplicates
-  const filterPanel = document.getElementById('filterDropdownPanel');
-  let html = filterPanel.innerHTML;
-  html = html.replace(/id="priceMin"/g, 'id="priceMinMobile"').replace(/id="priceMax"/g, 'id="priceMaxMobile"');
-  document.getElementById('mobileFiltersContent').innerHTML = html;
-  // Sync current values
-  document.getElementById('priceMinMobile').value = document.getElementById('priceMin').value;
-  document.getElementById('priceMaxMobile').value = document.getElementById('priceMax').value;
-  document.getElementById('priceMinMobile').oninput = () => { document.getElementById('priceMin').value = document.getElementById('priceMinMobile').value; applyFilters(); updateFilterActiveDot(); };
-  document.getElementById('priceMaxMobile').oninput = () => { document.getElementById('priceMax').value = document.getElementById('priceMaxMobile').value; applyFilters(); updateFilterActiveDot(); };
-  filtersModal.classList.add('open');
-};
-window.closeFiltersMobile = function(e) {
-  if (e && e.target !== document.getElementById('filtersModal')) return;
-  document.getElementById('filtersModal').classList.remove('open');
 };
 
 // =============================================
@@ -1509,14 +1575,13 @@ window.showToast = function(msg, type = 'default') {
 };
 
 // =============================================
-// ESC key closes modals
+// ESC key closes overlays (carrito, favoritos, buscador móvil)
 // =============================================
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    closeProductModal();
     closeCartDrawer();
     closeFavsDrawer();
-    closeMobileSearch();
+    closeMobileHeaderSearch();
   }
 });
 
