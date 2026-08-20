@@ -147,7 +147,7 @@ input, select, textarea { font-family: inherit; }
   gap: var(--sp-2);
   padding: 0 var(--sp-5);
   height: 42px;
-  border-radius: var(--r-md);
+  border-radius: var(--r-full);
   font-weight: 700;
   font-size: 0.9rem;
   transition: all var(--t-fast);
@@ -197,7 +197,7 @@ input, select, textarea { font-family: inherit; }
   width: 40px;
   height: 40px;
   padding: 0;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-full);
   background: transparent;
   color: var(--text-2);
   display: flex;
@@ -326,20 +326,31 @@ input, select, textarea { font-family: inherit; }
   border: none;
   border-radius: var(--r-full);
   color: var(--surface);
-  padding: 0 var(--sp-4) 0 var(--sp-10);
+  padding: 0 44px 0 var(--sp-10);
   font-size: 0.88rem;
   outline: none;
-  transition: all var(--t-fast);
+  transition: background var(--t-fast), color var(--t-fast);
 }
 .header-search::placeholder { color: rgba(255,255,255,.55); }
+/* Al enfocar: nada de resplandor de color, la barra pasa a blanco y
+   los íconos (lupa + filtros) se oscurecen para que se sigan viendo */
 .header-search:focus {
-  box-shadow: 0 0 0 2px var(--brand-amber-light);
+  background: var(--surface);
+  color: var(--text-1);
+}
+.header-search:focus::placeholder { color: var(--text-3); }
+.header-search-wrap:focus-within .header-search-icon,
+.header-mobile-search-wrap:focus-within .header-search-icon,
+.header-search-wrap:focus-within .header-search-filter-btn,
+.header-mobile-search-wrap:focus-within .header-search-filter-btn {
+  color: var(--brown-900);
 }
 .header-search-icon {
   position: absolute;
   left: 12px;
   top: 59%;
   transform: translateY(-50%);
+  transition: color var(--t-fast);
   color: rgba(255,255,255,.85);
   pointer-events: none;
 }
@@ -375,6 +386,7 @@ input, select, textarea { font-family: inherit; }
     flex: 1 1 auto;
     width: auto;
     opacity: 1;
+    overflow: visible;
   }
 }
 .header-mobile-search-wrap .header-search {
@@ -389,18 +401,49 @@ input, select, textarea { font-family: inherit; }
   margin-left: auto;
 }
 /* Íconos del header siempre claros (blanco) sobre el fondo oscuro de la píldora.
-   Al pasar el mouse (o estar activos), se recolorean a naranja sólido. */
+   Al pasar el mouse (o estar activos), se recolorean naranja — círculo directo. */
 .header-actions .btn-icon {
   color: rgba(255,255,255,.92);
   position: relative;
 }
 .header-actions .btn-icon:hover,
-.header-actions .btn-icon.active,
-.header-actions .dropdown.open .btn-icon {
+.header-actions .btn-icon.active {
   background: var(--accent);
   color: white;
 }
-.header-filter-dropdown { position: relative; }
+
+/* Botón de Filtros — vive DENTRO de la barra de búsqueda (a la derecha,
+   antes del borde del pill), no en las acciones del header */
+.header-filter-dropdown {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+.header-search-filter-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.85);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+  position: relative;
+}
+.header-search-wrap:focus-within .header-search-filter-btn,
+.header-mobile-search-wrap:focus-within .header-search-filter-btn {
+  color: var(--brown-900);
+}
+.header-search-filter-btn:hover,
+.header-filter-dropdown.open .header-search-filter-btn {
+  background: var(--accent);
+  color: white !important;
+}
 /* Se despliega hacia la izquierda (anclado por el borde derecho) tanto en
    computadora como en celular, para no salirse de la pantalla */
 .header-filter-dropdown .dropdown-panel {
@@ -409,8 +452,8 @@ input, select, textarea { font-family: inherit; }
 }
 .header-filter-dropdown .filter-active-dot {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 1px;
+  right: 1px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -908,7 +951,7 @@ input, select, textarea { font-family: inherit; }
 .page-nav-btn {
   width: 34px;
   height: 34px;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -926,7 +969,7 @@ input, select, textarea { font-family: inherit; }
   min-width: 34px;
   height: 34px;
   padding: 0 8px;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-full);
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--text-2);
@@ -1088,7 +1131,7 @@ input, select, textarea { font-family: inherit; }
 .card-btn-cart {
   flex: 1;
   height: 36px;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-full);
   background: var(--brown-900);
   color: white;
   font-size: 0.8rem;
@@ -1298,6 +1341,54 @@ input, select, textarea { font-family: inherit; }
 .product-page-breadcrumb a:hover { color: var(--accent); }
 .product-page-breadcrumb .current { color: var(--text-2); font-weight: 700; }
 
+/* Bloque blanco tipo tarjeta que agrupa imagen + info + detalles,
+   separado de "También te puede interesar" por una línea sutil */
+.product-page-card {
+  background: var(--surface);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-sm);
+}
+@media (max-width: 768px) {
+  .product-page-card { padding: var(--sp-4); border-radius: var(--r-lg); }
+}
+.product-page-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--sp-10) 0 var(--sp-6);
+}
+
+/* Grilla de detalles adicionales del producto */
+.product-detail-specs {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--border);
+}
+.product-detail-specs-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-1);
+  margin-bottom: var(--sp-4);
+}
+.product-detail-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-3) var(--sp-6);
+}
+@media (max-width: 560px) {
+  .product-detail-specs-grid { grid-template-columns: 1fr; }
+}
+.spec-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: var(--text-2);
+}
+.spec-item svg { flex-shrink: 0; margin-top: 2px; }
+.spec-item strong { color: var(--text-1); }
+
 /* ============================================
    PRODUCT DETAIL — two-column layout (desktop)
    ============================================ */
@@ -1399,7 +1490,7 @@ input, select, textarea { font-family: inherit; }
   gap: var(--sp-3);
   align-items: stretch;
 }
-.detail-actions-row .qty-selector { background: var(--surface); border-radius: var(--r-md); flex-shrink: 0; }
+.detail-actions-row .qty-selector { background: var(--surface); border-radius: var(--r-full); flex-shrink: 0; }
 .detail-actions-row .qty-btn { background: var(--surface); }
 .detail-btn-cart { flex: 1; height: 50px; background: var(--surface); }
 .detail-btn-order { width: 100%; height: 52px; margin-top: 2px; }
@@ -1416,7 +1507,7 @@ input, select, textarea { font-family: inherit; }
 .variant-option {
   padding: var(--sp-1) var(--sp-3);
   border: none;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-full);
   font-size: 0.83rem;
   font-weight: 600;
   cursor: pointer;
@@ -1439,7 +1530,7 @@ input, select, textarea { font-family: inherit; }
   align-items: center;
   gap: 0;
   border: none;
-  border-radius: var(--r-md);
+  border-radius: var(--r-full);
   overflow: hidden;
   width: fit-content;
   background: var(--bg);
