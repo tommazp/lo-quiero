@@ -483,7 +483,7 @@ function renderCategories() {
     ${categories.length===0 ? '<div class="empty-state"><strong>No hay categorías</strong></div>' : `
     <div class="cat-grid">${categories.map(c=>`
       <div class="cat-card">
-        <div class="cat-icon ${c.active?'':'inactive'}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+        <div class="cat-icon ${c.active?'':'inactive'}">${CATEGORY_ICON_CHOICES[c.icon] || CATEGORY_ICON_CHOICES.tag}</div>
         <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.9rem">${c.name}</div><div style="font-size:.75rem;color:var(--text-3)">${c.slug||''}</div></div>
         <label class="toggle-wrap"><input type="checkbox" ${c.active?'checked':''} onchange="toggleCatActive('${c.id}')"><span class="toggle-slider"></span></label>
         <button class="btn btn-outline btn-sm btn-icon" onclick="openCatModal('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
@@ -491,22 +491,49 @@ function renderCategories() {
       </div>`).join('')}</div>`}`);
 }
 
+const CATEGORY_ICON_CHOICES = {
+  cpu:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>',
+  home:     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+  utensils: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>',
+  layers:   '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>',
+  shirt:    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>',
+  droplets: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/></svg>',
+  star:     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  tag:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 22l-9-9 8.59-8.59A2 2 0 0 1 13 4h6a2 2 0 0 1 2 2v6a2 2 0 0 1-.41 1.41z"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>',
+};
+
+window.pickCatIcon = function(key, btn) {
+  document.getElementById('cIcon').value = key;
+  btn.parentElement.querySelectorAll('.icon-picker-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+};
+
 function openCatModal(id) {
   const cat = id ? categories.find(c=>c.id===id) : null;
+  const currentIcon = cat?.icon || 'cpu';
+  const iconGridHtml = Object.entries(CATEGORY_ICON_CHOICES).map(([key, svg]) => `
+    <button type="button" class="icon-picker-btn ${key===currentIcon?'selected':''}" onclick="pickCatIcon('${key}', this)" title="${key}">${svg}</button>
+  `).join('');
   showModal(`${cat?'Editar':'Nueva'} categoría`, `
     <div class="form-group"><label class="form-label">Nombre <span class="req">*</span></label><input class="form-input" id="cName" value="${cat?.name||''}" placeholder="Ej: Blanquería" autofocus /></div>
-    <div class="form-group"><label class="form-label">Slug</label><input class="form-input" id="cSlug" value="${cat?.slug||''}" placeholder="blanqueria" /><p class="form-hint">Se genera automáticamente si lo dejás vacío</p></div>`,
+    <div class="form-group"><label class="form-label">Slug</label><input class="form-input" id="cSlug" value="${cat?.slug||''}" placeholder="blanqueria" /><p class="form-hint">Se genera automáticamente si lo dejás vacío</p></div>
+    <div class="form-group">
+      <label class="form-label">Ícono</label>
+      <input type="hidden" id="cIcon" value="${currentIcon}" />
+      <div class="icon-picker-grid">${iconGridHtml}</div>
+    </div>`,
     async () => {
       const name = document.getElementById('cName').value.trim();
       if (!name) { showToast('El nombre es obligatorio', 'error'); return false; }
       const slug = document.getElementById('cSlug').value.trim() || name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^\w-]/g,'');
+      const icon = document.getElementById('cIcon').value || 'cpu';
       if (sb) {
-        if (id) await sb.from('categories').update({ name, slug }).eq('id', id);
-        else    await sb.from('categories').insert({ name, slug, active: true, sort_order: categories.length });
+        if (id) await sb.from('categories').update({ name, slug, icon }).eq('id', id);
+        else    await sb.from('categories').insert({ name, slug, icon, active: true, sort_order: categories.length });
         await loadAll();
       } else {
-        if (id) { const c=categories.find(x=>x.id===id); if(c){ c.name=name; c.slug=slug; } }
-        else categories.push({ id: Date.now().toString(), name, slug, active: true, sort_order: categories.length });
+        if (id) { const c=categories.find(x=>x.id===id); if(c){ c.name=name; c.slug=slug; c.icon=icon; } }
+        else categories.push({ id: Date.now().toString(), name, slug, icon, active: true, sort_order: categories.length });
       }
       showToast(id?'Categoría actualizada':'Categoría creada', 'success');
       renderCategories();

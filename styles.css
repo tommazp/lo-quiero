@@ -176,7 +176,7 @@ input, select, textarea { font-family: inherit; }
   color: white;
   font-size: 0.95rem;
   height: 48px;
-  border-radius: var(--r-lg);
+  border-radius: var(--r-full);
 }
 .btn-wa:hover { background: #22c55e; }
 
@@ -309,12 +309,7 @@ input, select, textarea { font-family: inherit; }
   flex: 1 1 auto;
   max-width: 900px;
   position: relative;
-  transition: max-width var(--t-slow), flex-basis var(--t-slow);
-}
-/* Al enfocar, la barra "desliza" un poco más hacia los costados,
-   ganando el espacio que dejan libre los íconos */
-.header-search-wrap:focus-within {
-  max-width: 960px;
+  transition: background var(--t-fast);
 }
 @media (max-width: 768px) {
   .header-search-wrap { display: none; }
@@ -414,7 +409,7 @@ input, select, textarea { font-family: inherit; }
 
 /* Botón de Filtros — vive DENTRO de la barra de búsqueda (a la derecha,
    antes del borde del pill), no en las acciones del header */
-.header-filter-dropdown {
+#filterDropdown.header-filter-dropdown {
   position: absolute;
   right: 4px;
   top: 50%;
@@ -786,18 +781,24 @@ input, select, textarea { font-family: inherit; }
 
 
 /* ============================================
-   CAROUSEL / HERO BANNER
+   CAROUSEL / HERO BANNER — de extremo a extremo de la pantalla,
+   sin esquinas redondeadas ni márgenes laterales
    ============================================ */
 .hero-carousel {
-  border-radius: var(--r-xl);
   overflow: hidden;
   position: relative;
   margin-bottom: var(--sp-8);
   aspect-ratio: 16/5;
   background: var(--brown-900);
+  /* Trick de "full-bleed": se sale del contenedor centrado (page-layout,
+     max-width 1280px) y ocupa el 100% del ancho de la pantalla */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  border-radius: 0;
 }
 @media (max-width: 768px) {
-  .hero-carousel { aspect-ratio: 4/3; border-radius: var(--r-lg); }
+  .hero-carousel { aspect-ratio: 4/3; }
 }
 .carousel-track {
   display: flex;
@@ -864,6 +865,8 @@ input, select, textarea { font-family: inherit; }
   background: white;
   width: 24px;
 }
+/* Las flechas sólo aparecen al pasar el mouse por encima (en compu).
+   En celular, sin hover, quedan siempre visibles para poder navegarlo. */
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -879,7 +882,15 @@ input, select, textarea { font-family: inherit; }
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(4px);
-  transition: background var(--t-fast);
+  transition: background var(--t-fast), opacity var(--t-fast);
+  opacity: 0;
+}
+.hero-carousel:hover .carousel-btn,
+.carousel-btn:focus-visible {
+  opacity: 1;
+}
+@media (max-width: 768px) {
+  .carousel-btn { opacity: 1; }
 }
 .carousel-btn:hover { background: rgba(255,255,255,.35); }
 .carousel-btn.prev { left: var(--sp-4); }
@@ -1289,7 +1300,15 @@ input, select, textarea { font-family: inherit; }
   justify-content: center;
   cursor: pointer;
   z-index: 5;
-  transition: background var(--t-fast), color var(--t-fast);
+  transition: background var(--t-fast), color var(--t-fast), opacity var(--t-fast);
+  opacity: 0;
+}
+.detail-gallery:hover .detail-gallery-nav,
+.detail-gallery-nav:focus-visible {
+  opacity: 1;
+}
+@media (max-width: 768px) {
+  .detail-gallery-nav { opacity: 1; }
 }
 .detail-gallery-nav:hover { background: var(--surface); color: var(--accent); }
 .detail-gallery-nav.prev { left: var(--sp-3); }
@@ -1357,12 +1376,26 @@ input, select, textarea { font-family: inherit; }
   border-top: 1px solid var(--border);
   margin: var(--sp-10) 0 var(--sp-6);
 }
+/* Línea sutil entre bloques dentro de la misma tarjeta blanca
+   (imagen/compra → descripción → detalles) */
+.product-page-divider-thin {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--sp-6) 0;
+}
+
+/* Descripción del producto, debajo de la imagen */
+.detail-desc-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-1);
+  margin-bottom: var(--sp-3);
+}
 
 /* Grilla de detalles adicionales del producto */
 .product-detail-specs {
-  margin-top: var(--sp-8);
-  padding-top: var(--sp-6);
-  border-top: 1px solid var(--border);
+  /* el margen/borde superior ahora lo pone la línea divisoria compartida */
 }
 .product-detail-specs-title {
   font-family: var(--font-display);
@@ -1403,10 +1436,9 @@ input, select, textarea { font-family: inherit; }
     align-items: flex-start;
     gap: var(--sp-8);
   }
-  /* Imagen más chica en compu para que entren la foto, las miniaturas
-     y los datos del producto sin tener que scrollear tanto */
-  .detail-gallery-col { flex: 0 0 420px; max-width: 420px; min-width: 0; }
-  .detail-info-col { flex: 1; min-width: 0; max-width: 460px; }
+  /* Imagen un poco más grande; la columna de compra queda más angosta */
+  .detail-gallery-col { flex: 0 0 480px; max-width: 480px; min-width: 0; }
+  .detail-info-col { flex: 1; min-width: 0; max-width: 320px; }
   .detail-gallery { margin-bottom: 0; aspect-ratio: 1; }
 }
 
