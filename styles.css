@@ -693,20 +693,36 @@ input, select, textarea { font-family: inherit; }
 
 @media (max-width: 768px) {
   .dropdown-panel { left: 0; right: 0; min-width: 0; max-width: none; }
-  /* El panel de filtros abre hacia abajo-izquierda: anclado al borde
-     derecho del ícono, se extiende hacia la izquierda de la pantalla.
-     max-height + scroll para que nunca se corte, sea cual sea el alto
-     de la pantalla del celular. */
+  /* En celular, el panel de filtros queda centrado y fijo en el medio
+     de la pantalla (no anclado al ícono) para que se vea completo
+     siempre, sea cual sea el alto/ancho del celular. En compu no
+     cambia: sigue anclado al botón, como antes. */
   .header-filter-dropdown .dropdown-panel {
-    left: auto;
-    right: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
     min-width: 0;
-    width: calc(100vw - 24px);
-    max-width: 340px;
-    max-height: min(70vh, calc(100vh - var(--header-h) - 48px));
+    width: calc(100vw - 32px);
+    max-width: 360px;
+    max-height: calc(100vh - 96px);
     overflow-y: auto;
   }
 }
+
+/* Fondo semi-transparente detrás del panel de filtros en celular,
+   para que quede claro que es un panel modal centrado */
+@media (max-width: 768px) {
+  .header-filter-dropdown.open::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(28,15,0,.45);
+    z-index: 2;
+  }
+}
+
 
 /* Filter chips */
 .filter-group { margin-bottom: var(--sp-4); }
