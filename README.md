@@ -1,4 +1,4 @@
-# LO QUIERO! 
+# LO QUIERO! 🛍️
 
 Catálogo web completo con panel de administración, carrito, favoritos, descuentos y pedidos por WhatsApp — conectado a Supabase.
 

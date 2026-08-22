@@ -694,13 +694,17 @@ input, select, textarea { font-family: inherit; }
 @media (max-width: 768px) {
   .dropdown-panel { left: 0; right: 0; min-width: 0; max-width: none; }
   /* El panel de filtros abre hacia abajo-izquierda: anclado al borde
-     derecho del ícono, se extiende hacia la izquierda de la pantalla */
+     derecho del ícono, se extiende hacia la izquierda de la pantalla.
+     max-height + scroll para que nunca se corte, sea cual sea el alto
+     de la pantalla del celular. */
   .header-filter-dropdown .dropdown-panel {
     left: auto;
     right: 0;
     min-width: 0;
     width: calc(100vw - 24px);
     max-width: 340px;
+    max-height: min(70vh, calc(100vh - var(--header-h) - 48px));
+    overflow-y: auto;
   }
 }
 
@@ -787,7 +791,7 @@ input, select, textarea { font-family: inherit; }
 .hero-carousel {
   overflow: hidden;
   position: relative;
-  margin-bottom: var(--sp-8);
+  margin-bottom: var(--sp-10);
   aspect-ratio: 16/5;
   background: var(--brown-900);
   /* Trick de "full-bleed": se sale del contenedor centrado (page-layout,
@@ -799,6 +803,17 @@ input, select, textarea { font-family: inherit; }
 }
 @media (max-width: 768px) {
   .hero-carousel { aspect-ratio: 4/3; }
+}
+/* Los carruseles de categoría "flotan" sobre el borde inferior del
+   banner, como tarjetas superpuestas (si no hay categorías con
+   productos para mostrar, el contenedor queda vacío y esto no aplica) */
+#sectionsContainer:not(:empty) {
+  position: relative;
+  z-index: 2;
+  margin-top: -64px;
+}
+@media (max-width: 768px) {
+  #sectionsContainer:not(:empty) { margin-top: -40px; }
 }
 .carousel-track {
   display: flex;
@@ -1745,6 +1760,89 @@ input, select, textarea { font-family: inherit; }
   box-shadow: var(--shadow-xl);
 }
 .favs-drawer.open { transform: translateX(0); }
+
+/* ============================================
+   CUENTA DE USUARIO
+   ============================================ */
+.account-intro { padding: var(--sp-2) 0 var(--sp-4); }
+.account-intro h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
+.account-intro p { font-size: 0.85rem; color: var(--text-2); line-height: 1.5; }
+.account-oauth-btns { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.account-oauth-btns .btn { justify-content: flex-start; padding-left: var(--sp-5); gap: var(--sp-3); }
+.account-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: var(--text-3);
+  font-size: 0.78rem;
+  margin: var(--sp-4) 0;
+}
+.account-divider::before, .account-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.form-group-account { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.form-input-account {
+  height: 46px;
+  padding: 0 var(--sp-4);
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--bg);
+  color: var(--text-1);
+  font-size: 0.9rem;
+  outline: none;
+  transition: box-shadow var(--t-fast);
+}
+.form-input-account:focus { box-shadow: 0 0 0 2px var(--accent); }
+.account-email-btns { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.account-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-5);
+  margin-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--border);
+}
+.account-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.account-name { font-weight: 700; font-size: 0.98rem; color: var(--text-1); }
+.account-email { font-size: 0.82rem; color: var(--text-3); }
+.account-credit-card {
+  background: var(--brand-orange-pale);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-5);
+}
+.account-credit-label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.05em; }
+.account-credit-value { display: block; font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: var(--accent); margin: 4px 0 8px; }
+.account-credit-hint { font-size: 0.8rem; color: var(--text-2); line-height: 1.5; }
+
+.credit-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.85rem;
+  color: var(--text-2);
+  margin-bottom: var(--sp-3);
+  cursor: pointer;
+}
+.credit-toggle-row input { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
+.credit-toggle-row strong { color: var(--accent); }
 
 /* ============================================
    COMMENTS PANEL
